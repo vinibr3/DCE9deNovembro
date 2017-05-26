@@ -1,8 +1,9 @@
+
+
 /* Fonts */
 @import url(http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic);
 @import url(http://fonts.googleapis.com/css?family=Oswald:400,700);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600);
-
 body{
 	font-family: "PT Sans", Arial, Helvetica, sans-serif;
 	background:#fff asset-url('body-back.png') repeat;
@@ -16,7 +17,7 @@ body{
 h1,h2,h3,h4,h5,h6{
 font-family: "Oswald", sans-serif;
 font-weight:normal;
-color:#15458c;
+color:#1fa238;
 margin:3px 0px;
 padding:3px 0px;
 }
@@ -721,7 +722,7 @@ padding:0px;
 margin:0px;
 font-size:20px;
 line-height:35px;
-color:#15458c;
+color:#1fa238;
 background:asset-url('dot.png') left center repeat-x;
 background-size:4px 20px;
 }
@@ -732,7 +733,7 @@ padding-right:8px;
 }
 
 .hero p{
-color:#15458c;
+color:#1fa238;
 }
 
 /* Features */
@@ -829,7 +830,7 @@ line-height:30px;
 
 .blog .entry h2 a, .blog .entry h2 a:visited, .blog .entry h2 a:hover{
 text-decoration:none;
-color:#15458c;
+color:#1fa238;
 }
 
 .blog .meta{
@@ -1036,7 +1037,7 @@ margin-bottom:10px;
 }
 
 .sidebar .widget h4{
-color: #15458c;
+color: #1fa238;
 }
 
 .sidebar .widget .form-search{
@@ -2120,15 +2121,15 @@ color:#ddd;
 }
 
 footer hr{
-border-top:1px solid #faa417;
+border-top:1px solid #ffff02;
 padding:0px;
-border-bottom:1px solid #066034;
+border-bottom:1px solid #ffff02;
 }
 
 footer h4{
 font-size:15px;
 padding-bottom:10px;
-border-bottom:1px solid #faa417;
+border-bottom:1px solid #ffff02;
 margin-bottom:10px;
 color:#FFF;
 }
@@ -2138,7 +2139,7 @@ color:#FFF;
 }
 
 footer a:hover{
-color:#faa417;
+color:#ffff02;
 text-decoration:none;
 }
 

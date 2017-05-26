@@ -111,3 +111,21 @@ ul.ui-autocomplete{
     }
 
 }
+
+/* Override Bootstrap */
+
+.text-primary{
+    color: #1fa238;
+}
+
+.bg-primary{
+    background-color: #1fa238;
+}
+
+.panel-primary{
+    border-color: #ffff02
+}
+
+.panel-primary .panel-heading{
+    background-color: #1fa238;
+}

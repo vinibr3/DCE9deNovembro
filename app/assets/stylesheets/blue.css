@@ -1,235 +1,245 @@
-/* Green Color CSS */
+/* Color 
+	primary   #1fa238  -> #1fa238
+	secondary #1fa238  -> #00df00
+	terciary  #066034  -> #ffff02
+*/
 
 body{
-border-top:3px solid #15458c;
+border-top:3px solid #ffff02;
+}
+
+.container hr{
+border-top:1px solid #ffff02;
+padding:0px;
+border-bottom:1px solid #ffff02;
 }
 
 .color{
-color:#15458c;
+color:#1fa238;
 }
 
 a, a:visited{
-color:#15458c;
+color:#1fa238;
 }
 
 a:hover{
-color:#faa417;
+color:#00DF00;
 }
 
 .navbar{
-background: #15458c !important;
-border-top:1px solid #066034 !important;
-border-bottom:1px solid #066034 !important; 
+background: #1fa238 !important;
+border-top:1px solid #ffff02 !important;
+border-bottom:1px solid #ffff02 !important; 
 }
 
 .nav .open>a, .nav .open>a:hover, .nav .open>a:focus {
-   border-color: #15458c;
+   border-color: #1fa238;
 }
 
 .navbar button{
-background:#faa417 !important;  
+background:#00DF00 !important;  
 }
 
 .navbar button:hover{
-background:#faa417 !important;
+background:#00DF00 !important;
 }
 
 .navbar .nav{
-border-right:1px solid #15458c;
+border-right:1px solid #1fa238;
 }
 
 .navbar .nav > li > a{
-background: #15458c; 
-border-left:1px solid #15458c;
+background: #1fa238; 
+border-left:1px solid #1fa238;
 }
 
 .navbar .nav > li > a:hover{
-background:#faa417 !important;
+background:#00DF00 !important;
 }
 
 .navbar .nav .active > a,
 .navbar .nav .active > a:hover,
 .navbar .nav .active > a:focus {
-background: #faa417 !important;
+background: #00DF00 !important;
 }
 
 .dropdown-toggle{
-background: #15458c !important;
+background: #1fa238 !important;
 }
 
 
 .dropdown-menu{
-background:#15458c !important;
-border:1px solid #faa417;
+background:#1fa238 !important;
+border:1px solid #00DF00;
 }
 
 .dropdown-menu a{
-background:#15458c !important;
-border-bottom:1px solid #faa417;
+background:#1fa238 !important;
+border-bottom:1px solid #00DF00;
 }
 
 .dropdown-menu a:hover,.dropdown-menu a:focus{
-background:#faa417 !important;
+background:#00DF00 !important;
 }
 
 .social i{
-background:#15458c;
+background:#1fa238;
 }
 
 .social i:hover{
-background:#faa417;
+background:#00DF00;
 }
 
 .flex-caption{
-border-left:4px solid #15458c;
+border-left:4px solid #1fa238;
 }
 
 .service i{
-color:#15458c;
+color:#1fa238;
 }
 
 /* Timeline */
 
 .time .tidate{
-background:#15458c;
+background:#1fa238;
 }
 
 .time .timatter{
-border-bottom:2px solid #15458c;
+border-bottom:2px solid #1fa238;
 }
 
 /* Events - Accordion*/
 
 .events .panel-heading h5{
-background:#15458c;
+background:#1fa238;
 }
 
 /* Slider */
 
 .da-slider{
-border-top: 4px solid #15458c;
-border-bottom: 4px solid #15458c;
+border-top: 4px solid #1fa238;
+border-bottom: 4px solid #1fa238;
 }
 
 .da-slide h2{
-color:#15458c;
+color:#1fa238;
 }
 
 .da-slide .da-link{
-background:#15458c;
+background:#1fa238;
 }
 
 /* Testimonial */
 
 .test{
-border-bottom:2px solid #15458c;
+border-bottom:2px solid #1fa238;
 }
 
 .test-arrow{
-border-top-color: #15458c;
+border-top-color: #1fa238;
 }
 
 /* Feature alt */
 
 .afeature:hover{
-border:5px solid #15458c;
+border:5px solid #1fa238;
 }
 
 .afmatter i{
-color:#15458c;
+color:#1fa238;
 }
 
 .rpost1:hover,.rpost2:hover{
-border-bottom:2px solid #15458c;
+border-bottom:2px solid #1fa238;
 }
 
 .panel-heading i{
-color:#15458c;
+color:#1fa238;
 }
 
 .process i{
-color:#15458c;
+color:#1fa238;
 }
 
 .process-meta span{
-background:#15458c;
+background:#1fa238;
 }
 
 .feat h4 i{
-color:#15458c;
+color:#1fa238;
 }
 
 .blog .meta i{
-color:#15458c;
+color:#1fa238;
 }
 
 .posts .tags a{
-background:#15458c;
-border:1px solid #faa417;
-border-bottom:3px solid #faa417;
+background:#1fa238;
+border:1px solid #00DF00;
+border-bottom:3px solid #00DF00;
 }
 
 .posts .tags a:hover{
-border-bottom:3px solid #15458c;
-background:#faa417;
-border:1px solid #faa417;
+border-bottom:3px solid #1fa238;
+background:#00DF00;
+border:1px solid #00DF00;
 }
 
 .paging a:hover{
-background: #15458c;
-border:1px solid #faa417;
+background: #1fa238;
+border:1px solid #00DF00;
 }
 
 .paging .current{
-background: #15458c;
-border:1px solid #faa417;
+background: #1fa238;
+border:1px solid #00DF00;
 }
 
 .serv .simg i{
-color:#15458c;
+color:#1fa238;
 }
 
 .button a, .button a:visited{
-background:#15458c;
-border-bottom:2px solid #faa417;
+background:#1fa238;
+border-bottom:2px solid #00DF00;
 }
 
 .button a:hover{
-background:#faa417;
+background:#00DF00;
 }
 
 .pricel .phead-top{
-background:#15458c;
-border:1px solid #faa417;
+background:#1fa238;
+border:1px solid #00DF00;
 }
 
 .pricel .phead-bottom{
-border-top:1px solid #faa417;
+border-top:1px solid #00DF00;
 }
 
 .nav-tabs > li > a:hover{
-background:#15458c;
+background:#1fa238;
 }
 
 .about .asocial i{
-background:#15458c;
+background:#1fa238;
 }
 
 .resume h4{
-background:#15458c;
+background:#1fa238;
 }
 
 .resume h5{
-color:#15458c;
+color:#1fa238;
 }
-.content ul li i { color:#15458c;}
-footer ul li i { color:#15458c;}
+.content ul li i { color:#1fa238;}
+footer ul li i { color:#1fa238;}
 footer{
-border-top:3px solid #15458c;
+border-top:3px solid #ffff02;
 }
 
 .main-box i {
-	color: #15458c;
+	color: #1fa238;
 	padding-right: 5px;
 }
 

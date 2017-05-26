@@ -95,7 +95,7 @@
                          </div>
                          <div id="collapseTwo" class="panel-collapse collapse">
                            <div class="panel-body">                              
-                             <p>Além de poder ser emitida apenas pelas entidades do movimento estudantil autorizadas, a Carteira de Identificação Estudantil (CIE) agora é padronizada nacionalmente e deve vir com certificação digital de segurança garantida pela parceria com Instituto Nacional de Tecnologia da Informação (ITI), autarquia ligada à presidência da república. A nova carteirinha contém um código de barras e um QR Code que traz mais segurança e tranquilidade ao usuário e ao bilheteiro, impedindo as fraudes.</p>
+                             <p>Além de poder ser emitida apenas pelas entidades do movimento estudantil autorizadas, a Carteira de Identificação Estudantil (CIE) agora é padronizada nacionalmente e deve vir com certificação digital de segurança garantida pela parceria com Instituto Nacional de Tecnologia da Informação (ITI), autarquia ligada à presidência da república. A nova carteirinha contém um código de uso e um QR Code que traz mais segurança e tranquilidade ao usuário e ao bilheteiro, impedindo as fraudes.</p>
                            </div>
                          </div>
                        </div>
@@ -157,7 +157,7 @@
                          </div>
                          <div id="collapseSix" class="panel-collapse collapse">
                            <div class="panel-body">                          
-                            <p>O Documento possui um custo de confecção padronizado nacionalmente em R$30,00 </p>
+                            <p>O Documento possui um custo de confecção de R$<%= Entidade.entidade_padrao.valor_carteirinha if Entidade.entidade_padrao%>.</p>
                            </div>
                          </div>
                        </div>
@@ -166,7 +166,7 @@
                        <div class="panel">
                          <div class="panel-heading">
                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
-                             <h5 class="panel-title">A carteirinha da <%= ENV['STUDENTCASYSTEM_NOME_ENTIDADE'] %> vale para todo o Brasil?</h5>
+                             <h5 class="panel-title">A carteirinha da(o) <%= ENV['STUDENTCASYSTEM_NOME_ENTIDADE'] %> vale para todo o Brasil?</h5>
                            </a>
                          </div>
                          <div id="collapseSeven" class="panel-collapse collapse">

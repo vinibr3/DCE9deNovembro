@@ -22,6 +22,10 @@ class PagesController < ApplicationController
     
   end
 
+  def contato
+    @entidade  = Entidade.entidade_padrao
+  end
+
 private
   def page_params
     params.require(:page_params).permit(:codigo_uso)
