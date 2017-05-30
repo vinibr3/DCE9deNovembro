@@ -42,19 +42,19 @@
                                     <div class="address">
                                         <address>
                                             <!-- Company name -->
-                                            <strong><%= @entidade.sigla %></strong><br>
+                                            <strong><%= @entidade.sigla if @entidade%></strong><br>
                                             <!-- Address -->
-                                            <%= @entidade.logradouro %><br>
-                                            <%= @entidade.cidade %>&nbsp;-&nbsp;<%= @entidade.uf %>&nbsp;&nbsp;<%= @entidade.cep%><br>
+                                            <%= @entidade.logradouro if @entidade%><br>
+                                            <%= @entidade.cidade if @entidade%>&nbsp;-&nbsp;<%= @entidade.uf if @entidade%>&nbsp;&nbsp;<%= @entidade.cep if @entidade%><br>
                                             <!-- Phone number -->
-                                            <abbr title="Phone">Tel:</abbr>+55 <%= @entidade.telefone %><br />
+                                            <abbr title="Phone">Tel:</abbr>+55 <%= @entidade.telefone if @entidade%><br />
                                         </address>
                                              
                                         <address>
                                             <!-- Name -->
-                                            <strong><%= @entidade.nome %></strong><br>
+                                            <strong><%= @entidade.nome if @entidade%></strong><br>
                                             <!-- Email -->
-                                              <a href="mailto:#"><%= @entidade.email %> %></a>
+                                              <a href="mailto:#"><%= @entidade.email if @entidade%></a>
                                         </address>
                                     </div>
                                 </div>

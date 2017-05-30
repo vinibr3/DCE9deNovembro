@@ -1,10 +1,19 @@
 <div>
 	<%= form_for ([@estudante, @estudante.carteirinhas.build]) do |f| %>
 		<div class="row">
-		<div class="col-sm-12 col-md-12">
-			<h3 class="text-primary" style="margin-bottom: 30px;"> Carteira de Identifição Estudantil </h3>
-			<%= image_tag "carteirinha-modelo.png", :class=>'img img-responsive' %>
-		</div>
+			<div class="col-sm-12 col-md-12">
+				<h3 class="text-primary" style="margin-bottom: 30px;"> Carteira de Identifição Estudantil </h3>
+				<div id="flip-card" ontouchstart="this.classList.toggle('hover');">
+					<div id="card">
+						<div id="front">
+							<%= image_tag "carteirinha-modelo.png", :class=>'img img-responsive' %>
+						</div>
+						<div id="back">
+							<%= image_tag "carteirinha-back.png", :class=>'img img-responsive' %>
+						</div>
+					</div>
+				</div>
+			</div>
 		<div class="col-sm-12 col-md-12">
 			<div class="checkbox"><br>
 				<p><strong>Valor:</strong>&nbsp;R$<%= @entidade.valor_carteirinha.to_f if @entidade %> </p>
@@ -35,3 +44,21 @@
 		</div>
 	<%end%>
 </div>
+<script type="text/javascript"> 
+		var graus=0;
+		var arco = 1;  // 1 em 1 grau
+		flip = true;
+		
+		$("#flip-card").mouseover(function(){
+			flip = false;
+		}).mouseout(function(){
+			flip = true;
+		});
+
+		setInterval(function(){
+			if(flip){
+				$('#card').css('transform', "rotateY("+graus+"deg)");
+				graus+=arco;
+			}
+		}, 50);
+</script>
