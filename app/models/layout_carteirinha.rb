@@ -6,6 +6,7 @@ class LayoutCarteirinha < ActiveRecord::Base
 
 	has_attached_file :verso, :styles => {:original => {}}, :path => "#{url_path}"
 	has_attached_file :anverso, :styles => {:original => {}}, :path => "#{url_path}"
+	has_attached_file :verso_alternativo, :styles => {:original => {}}, :path => "#{url_path}"
 
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png']
@@ -16,6 +17,9 @@ class LayoutCarteirinha < ActiveRecord::Base
 	validates_attachment_size :anverso, :less_than=> 2.megabytes
 	validates_attachment_file_name :anverso, :matches => FILES_NAME_PERMIT
 	validates_attachment_content_type :anverso, :content_type => FILES_CONTENT_TYPE
+	validates_attachment_size :verso_alternativo, :less_than=> 2.megabytes
+	validates_attachment_file_name :verso_alternativo, :matches => FILES_NAME_PERMIT
+	validates_attachment_content_type :verso_alternativo, :content_type => FILES_CONTENT_TYPE
 
 	validates_numericality_of :nome_posx, :nome_posy, :instituicao_ensino_posx, :instituicao_ensino_posy,
 	                          :curso_posx, :curso_posy, :codigo_uso_posx, :codigo_uso_posy, 

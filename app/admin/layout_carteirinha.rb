@@ -9,7 +9,8 @@ ActiveAdmin.register LayoutCarteirinha do
 	              :nao_depois_posx, :nao_depois_posy, :qr_code_posx, :qr_code_posy,
 	              :qr_code_width, :qr_code_height, :foto_posx, :foto_posy,
 	              :foto_width, :foto_height, :entidade_id, :matricula_posx, :matricula_posy, 
-	              :tamanho_fonte, :font_color, :font_weight, :font_style, :font_name, :font_family, :font_box
+	              :tamanho_fonte, :font_color, :font_weight, :font_style, :font_name, :font_family, :font_box,
+	              :verso_alternativo
 
 	filter :anverso_file_name
 	filter :verso_file_name
@@ -26,13 +27,16 @@ ActiveAdmin.register LayoutCarteirinha do
 	end
 
 	show do
-		panel "Verso" do 
+		panel "Arquivos" do 
 			attributes_table_for layout_carteirinha do
 				row :anverso do 
 					a layout_carteirinha.anverso_file_name, class: "show-popup-link", href: layout_carteirinha.anverso.url
 				end
 				row :verso do 
 					a layout_carteirinha.verso_file_name, class: "show-popup-link", href: layout_carteirinha.verso.url
+				end
+				row "Verso Alternativo" do
+					a layout_carteirinha.verso_alternativo_file_name, class: "show-popup-link", href: layout_carteirinha.verso_alternativo.url
 				end
 				row :entidade do
 					layout_carteirinha.entidade_nome
@@ -116,6 +120,7 @@ ActiveAdmin.register LayoutCarteirinha do
 		f.inputs "Layout", multipart: true do 
 			f.input :anverso, label: "Frente", :hint => "Imagem Atual: #{f.object.anverso_file_name}"
 			f.input :verso, label: "Verso", :hint => "Imagem Atual: #{f.object.verso_file_name}"
+			f.input :verso_alternativo, label: "Verso Alternativo", :hint => "Imagem Atual: #{f.object.verso_alternativo_file_name}"
 			f.input :entidade, collection: Entidade.order(:nome).map{|e| [e.nome, e.id]}, prompt: "Selecione Entidade", include_blank: false
 		end
 		f.inputs "Fonte" do

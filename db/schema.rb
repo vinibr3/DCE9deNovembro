@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524170003) do
+ActiveRecord::Schema.define(version: 20170602184300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 20170524170003) do
     t.integer  "entidade_id"
     t.integer  "cidade_id"
     t.integer  "admin_user_id"
+    t.integer  "layout"
   end
 
   add_index "estudantes", ["admin_user_id"], name: "index_estudantes_on_admin_user_id", using: :btree
@@ -345,8 +346,8 @@ ActiveRecord::Schema.define(version: 20170524170003) do
     t.string   "verso_content_type"
     t.integer  "verso_file_size"
     t.datetime "verso_updated_at"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "nome_posx"
     t.integer  "nome_posy"
     t.integer  "instituicao_ensino_posx"
@@ -377,6 +378,16 @@ ActiveRecord::Schema.define(version: 20170524170003) do
     t.integer  "matricula_posx"
     t.integer  "matricula_posy"
     t.integer  "tamanho_fonte"
+    t.string   "font_color"
+    t.string   "font_weight"
+    t.string   "font_style"
+    t.string   "font_name"
+    t.string   "font_family"
+    t.integer  "font_box"
+    t.string   "verso_alternativo_file_name"
+    t.string   "verso_alternativo_content_type"
+    t.integer  "verso_alternativo_file_size"
+    t.datetime "verso_alternativo_updated_at"
   end
 
   add_index "layout_carteirinhas", ["entidade_id"], name: "index_layout_carteirinhas_on_entidade_id", using: :btree

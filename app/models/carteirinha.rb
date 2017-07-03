@@ -297,7 +297,7 @@ class Carteirinha < ActiveRecord::Base
 	       data = Zip::OutputStream.write_buffer do |stream| 
 	        	carteirinhas.each do |carteirinha|
 		         	begin
-		         	file_name = "#{carteirinha.numero_serie}.jpg"
+		         	file_name = "#{carteirinha.nome_arquivo}"
 		         	temp = Tempfile.new file_name
 		         	img = Magick::Image.from_blob carteirinha.to_blob
 		         	img.first.write temp.path #converte para jpg
@@ -325,6 +325,14 @@ class Carteirinha < ActiveRecord::Base
 	def self.gera_codigo_uso
 		SecureRandom.hex(4).upcase
 	end 
+
+	def nome_arquivo
+		nome_file = "#{self.numero_serie}.jpg" 
+		"#{verso_alternativo}-#{nome_file}" if self.estudante.verso_alternativo?
+	end
+
+	def verso_alternativo # não remover, utilizado em 'views/carteirinhas/new.erb.html' 
+	end
 
 	protected
 		def vencida
