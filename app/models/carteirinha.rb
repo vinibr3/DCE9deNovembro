@@ -33,6 +33,7 @@ class Carteirinha < ActiveRecord::Base
 	enum status_versao_impressa: @@status_versao_impressas
 	enum forma_pagamento: @@forma_pagamentos
 	enum status_pagamento: @@status_pagamentos
+	enum verso: {verso_normal: "0", verso_alternativo: "1"}
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
@@ -50,7 +51,8 @@ class Carteirinha < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :escolaridade, length:{maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"},
-							             format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
+							             format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true					             
+
 	#foto
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
@@ -327,8 +329,7 @@ class Carteirinha < ActiveRecord::Base
 	end 
 
 	def nome_arquivo
-		nome_file = "#{self.numero_serie}.jpg" 
-		"#{verso_alternativo}-#{nome_file}" if self.estudante.verso_alternativo?
+		self.verso_alternativo? ? "verso-alternativo-#{self.numero_serie}.jpg" : "#{self.numero_serie}.jpg"
 	end
 
 	def verso_alternativo # não remover, utilizado em 'views/carteirinhas/new.erb.html' 

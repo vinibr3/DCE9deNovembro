@@ -41,6 +41,7 @@ class NotificationsController < ApplicationController
             c.valor = transaction.gross_amount.to_f
             c.forma_pagamento = Carteirinha.forma_pagamento_by_type(transaction.payment_method.type_id)
             c.status_pagamento = Carteirinha.status_pagamento_by_code(transaction.status.id)
+            c.verso = estudante.layout
           end
         end
       end

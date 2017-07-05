@@ -26,7 +26,7 @@ class CarteirinhasController < ApplicationController
 		else
 			@entidade = current_estudante.entidade
 			if @entidade && @entidade.layout_atual && @entidade.layout_atual.verso_alternativo 
-				current_estudante.verso_alternativo! if carteirinha_params[:verso_alternativo] == "1"
+				current_estudante.verso_alternativo! if carteirinha_params[:verso] == "1"
 			else
 				current_estudante.verso_normal!
 			end
@@ -62,6 +62,6 @@ class CarteirinhasController < ApplicationController
 
 	private
 		def carteirinha_params
-			params.require(:carteirinha).permit(:valor_carteirinha, :termos, :frete_carteirinha, :status_pagamento, :verso_alternativo)
+			params.require(:carteirinha).permit(:valor_carteirinha, :termos, :frete_carteirinha, :status_pagamento, :verso)
 		end
 end

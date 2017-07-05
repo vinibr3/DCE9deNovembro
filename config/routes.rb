@@ -68,7 +68,7 @@ Rails.application.routes.draw do
 
   # Rotas da API 
   namespace :api, defaults:{format: :json} do
-    resources :estudantes, only: [:update], param: :oauth_token do
+    resources :estudantes, only: [:update, :show], param: :oauth_token do
       resources :carteirinhas, only: [:create, :show]
     end
     get 'carteirinhas',          to: 'carteirinhas#index'

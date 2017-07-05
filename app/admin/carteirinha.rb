@@ -26,7 +26,7 @@ ActiveAdmin.register Carteirinha do
           :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
           :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
           :transaction_id, :certificado, :xerox_rg, :xerox_cpf, 
-          :comprovante_matricula, :carteirinha, :id, :aprovada_em, :admin_user_id
+          :comprovante_matricula, :carteirinha, :id, :aprovada_em, :admin_user_id, :verso
 	
   filter :nome
 	filter :numero_serie
@@ -99,6 +99,7 @@ ActiveAdmin.register Carteirinha do
                 row :numero_serie
                 row :layout_carteirinha_id
                 row :estudante_id
+                row :verso
             end
         end
         panel "Dados da Solicitaçao" do 
@@ -164,6 +165,7 @@ ActiveAdmin.register Carteirinha do
               end
             end 
             f.inputs "Dados da Solicitação" do
+                f.input :verso, as: :radio if f.object.layout_carteirinha && !f.object.layout_carteirinha.verso_alternativo_file_name.blank?
                 f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", 
                         label: "Status do Pagamento", :input_html=>{:id=>"status-pagamento-select"}
                 f.input :status_versao_impressa, label: "Status da Versão Impressa", include_blank: false, :input_html=>{:id=>"status-versao-impressas-select"},
@@ -281,6 +283,7 @@ ActiveAdmin.register Carteirinha do
 
               # Layout 
               c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last
+              c.verso = @estudante.layout
             end
             if @carteirinha.save 
               flash[:success] = "Carteirinha criada para o estudante: #{@estudante.nome}. Altere os dados de pagamento."
