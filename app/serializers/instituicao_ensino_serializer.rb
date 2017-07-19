@@ -3,11 +3,11 @@ class InstituicaoEnsinoSerializer < ActiveModel::Serializer
   attributes :id, :nome, :sigla, :cidade, :cidade_id, :estado, :cidade_estado
 
   def id
-  	object.id.to_s if object.id
+    object.id.to_s if object.id
   end
 
   def cidade 
-  	object.cidade.nome if object.cidade
+    object.cidade.nome if object.cidade
   end
 
   def cidade_id
@@ -15,7 +15,7 @@ class InstituicaoEnsinoSerializer < ActiveModel::Serializer
   end
 
   def estado
-  	object.estado.sigla if object.estado
+    object.estado.sigla if object.estado
   end
 
 end

@@ -83,6 +83,21 @@ Rails.application.routes.draw do
     # Controla Attachments
     get 'estudantes/:id/attachments/:name', to: 'attachments#show' 
     put 'estudantes/:id/attachments/update/:name', to: 'attachments#update'
+
+    # Cidades by UF
+    #get 'cidades/:uf',                to: 'cidades#index'
+    resources :estados, only: [], param: :uf do
+      resources :cidades, only: [:index, :show], param: :nome
+    end
+
+    # Autocomplete Insituicoes de Ensino
+    get 'instituicoes',               to: 'instituicao_ensinos#index'
+
+    # Escolaridades
+    resources :escolaridades, only: [:index] do
+      resources :cursos, only: [:index]
+    end
+
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

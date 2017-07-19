@@ -9,11 +9,11 @@ class InstituicaoEnsino < ActiveRecord::Base
   LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/ #/[[:alpha:]]/ #/[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/ 
 
   validates :nome, length: { maximum: 200, too_long: "Máximo de 100 caracteres permitidos!"}, 
-	                 		   format:{with: LETRAS, message:"Somente letras é permitido!"},
-	                 		   allow_blank: false
+                         format:{with: LETRAS, message:"Somente letras é permitido!"},
+                         allow_blank: false
   validates :sigla, length: {maximum: 10, too_long: "Máximo de #{count} caracteres permitidos."},
-					  format: {with: STRING_REGEX, message: "Somente letras é permitido"}, allow_blank: true
-  validates :cnpj, numericality: true, length: {is: 14, wrong_length: "14 caracteres."}, allow_blank: true				  
+            format: {with: STRING_REGEX, message: "Somente letras é permitido"}, allow_blank: true
+  validates :cnpj, numericality: true, length: {is: 14, wrong_length: "14 caracteres."}, allow_blank: true          
   validates :logradouro, length:{maximum: 50}, allow_blank: true
   validates :complemento, length:{maximum: 50}, allow_blank: true
   validates :numero, length:{maximum: 5}, numericality: true, allow_blank: true

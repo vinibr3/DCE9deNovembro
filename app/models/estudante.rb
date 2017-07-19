@@ -23,8 +23,6 @@ class Estudante < ActiveRecord::Base
 	has_attached_file :xerox_rg, :styles => {:original => {}}, :path => "#{url_path}"
 	has_attached_file :xerox_cpf, :styles => {:original => {}}, :path => "#{url_path}"
 	
-	enum layout: {verso_normal: "0", verso_alternativo: "1"}
-
 	FILES_NAME_PERMIT = [/png\Z/, /jpe?g\Z/, /pdf\Z/]
 	FILES_CONTENT_TYPE = ['image/jpeg', 'image/png', 'application/pdf']
 
@@ -271,7 +269,7 @@ class Estudante < ActiveRecord::Base
 	 		endereco['numero'] = self[:numero].to_i
 	 		endereco['complemento'] = self[:complemento]
 	 		endereco['estado'] = self.estado.sigla if self.estado
- 	 		endereco['cidade_id'] = self.cidade.id.to_s if self.cidade
+	 		endereco['cidade_id'] = self.cidade.id.to_s if self.cidade
 	 		endereco['cep'] = self[:cep].to_i
 	 		endereco['setor'] = self[:setor]
 	 		endereco
