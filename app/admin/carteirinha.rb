@@ -19,25 +19,25 @@ ActiveAdmin.register Carteirinha do
    end 
 
     permit_params :nome, :instituicao_ensino, :curso_serie, :matricula, :rg,
-				  :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
-				  :layout_carteirinha_id, :vencimento, :estudante_id, :foto, 
+          :data_nascimento, :cpf, :numero_serie, :validade, :qr_code,
+          :layout_carteirinha_id, :vencimento, :estudante_id, :foto, 
           :status_versao_impressa, :expedidor_rg, :uf_expedidor_rg,
           :cidade_inst_ensino,:escolaridade, :uf_inst_ensino, 
           :foto_file_name, :nao_antes, :nao_depois, :codigo_uso,
           :alterado_por, :valor, :forma_pagamento, :status_pagamento, 
           :transaction_id, :certificado, :xerox_rg, :xerox_cpf, 
-          :comprovante_matricula, :carteirinha, :id, :aprovada_em, :admin_user_id, :verso
-	
+          :comprovante_matricula, :carteirinha, :id, :aprovada_em, :admin_user_id
+  
   filter :nome
-	filter :numero_serie
+  filter :numero_serie
   filter :transaction_id
   filter :aprovada_em, label: "Data Aprovação", as: :date_range
   filter :admin_user, label:"Criada Por", collection: proc{AdminUser.all.map{|u| [u.nome, u.id]}}, :if=>proc{current_admin_user.sim?}
-	
-	index do
-		selectable_column
-    	column :nome 
-    	column "Curso" do |carteirinha|
+  
+  index do
+    selectable_column
+      column :nome 
+      column "Curso" do |carteirinha|
         carteirinha.curso_serie
       end
       column "Instituição de Ensino" do |carteirinha|
@@ -56,7 +56,7 @@ ActiveAdmin.register Carteirinha do
         end
       end
       actions
-	end
+  end
 
     show do
         panel "Dados do Estudante" do 
@@ -99,7 +99,6 @@ ActiveAdmin.register Carteirinha do
                 row :numero_serie
                 row :layout_carteirinha_id
                 row :estudante_id
-                row :verso
             end
         end
         panel "Dados da Solicitaçao" do 
@@ -165,7 +164,6 @@ ActiveAdmin.register Carteirinha do
               end
             end 
             f.inputs "Dados da Solicitação" do
-                f.input :verso, as: :radio if f.object.layout_carteirinha && !f.object.layout_carteirinha.verso_alternativo_file_name.blank?
                 f.input :status_pagamento, as: :select, include_blank: false, prompt: "Selecione status do pagamento", 
                         label: "Status do Pagamento", :input_html=>{:id=>"status-pagamento-select"}
                 f.input :status_versao_impressa, label: "Status da Versão Impressa", include_blank: false, :input_html=>{:id=>"status-versao-impressas-select"},
@@ -201,7 +199,11 @@ ActiveAdmin.register Carteirinha do
 
     before_update do |carteirinha|
       if carteirinha.status_versao_impressa.to_sym == :aprovada
-        carteirinha.aprovada_em = Time.new          if carteirinha.aprovada_em.blank?
+        if carteirinha.aprovada_em.blank?
+          carteirinha.aprovada_em = Time.new
+          current_admin_user.saldo = current_admin_user.saldo-current_admin_user.valor_certificado
+          current_admin_user.save                              
+        end
       end
       carteirinha.admin_user = current_admin_user if carteirinha.admin_user.blank?
       carteirinha.alterado_por = current_admin_user.usuario
@@ -220,7 +222,7 @@ ActiveAdmin.register Carteirinha do
             flash[:error]="Status da CIE não permite o download."
             redirect_to :back
         else
-            send_data carteirinha.to_blob, type: 'image/jpg', filename: carteirinha.nome_arquivo 
+            send_data carteirinha.to_blob, type: 'image/jpg', filename: "#{carteirinha.numero_serie}.jpg" 
         end
        else
         flash[:error]="Dados não encontrados."
@@ -235,10 +237,16 @@ ActiveAdmin.register Carteirinha do
       send_data  data[:stream], type:'application/zip', filename: data[:filename]
     end
 
+    sidebar :saldo, only: :index, if: proc{current_admin_user.entidade && current_admin_user.valor_certificado > 0} do
+      ul do
+        li "R$ #{current_admin_user.saldo}"
+        li "#{current_admin_user.saldo_carteiras} Carteira(s)"
+      end        
+    end
+
     controller do
       def create
         @estudante = Estudante.find(params[:estudante_id])
-        @carteirinha = nil
         atributos = @estudante.atributos_nao_preenchidos
         if atributos.count > 0 
           campos = ""
@@ -251,49 +259,57 @@ ActiveAdmin.register Carteirinha do
             flash[:alert] = "Não foi possível criar carteirinha. Entidade #{@estudante.entidade.nome} não tem nenhum layout de carteirinha."
             redirect_to :back
           else
-            @carteirinha = @estudante.carteirinhas.build do |c|
-              # Dados pessoais
-              c.nome = @estudante.nome
-              c.rg   = @estudante.rg
-              c.cpf  = @estudante.cpf
-              c.data_nascimento = @estudante.data_nascimento
-              c.expedidor_rg = @estudante.expedidor_rg
-              c.uf_expedidor_rg = @estudante.uf_expedidor_rg
-              c.foto = @estudante.foto
-              c.xerox_rg = @estudante.xerox_rg
-              c.xerox_cpf = @estudante.xerox_cpf
-              c.comprovante_matricula = @estudante.comprovante_matricula
-
-              # Dados estudantis
-              c.matricula = @estudante.matricula
-              c.instituicao_ensino = @estudante.instituicao_ensino.nome
-              c.cidade_inst_ensino = @estudante.instituicao_ensino.cidade.nome
-              c.uf_inst_ensino = @estudante.instituicao_ensino.estado.sigla
-              c.escolaridade = @estudante.escolaridade_nome
-              c.curso_serie = @estudante.curso_nome
-                    
-              # Dados de pagamento
-              c.valor = @estudante.entidade.valor_carteirinha.to_f+@estudante.entidade.frete_carteirinha.to_f
-              c.status_versao_impressa = :pagamento #status versao impressa
-              c.status_pagamento = :iniciado  #status pagamento
-              c.forma_pagamento = :a_definir  #forma pagamento
-                  
-              # Dados do Usuario admin
-              c.admin_user = current_admin_user
-
-              # Layout 
-              c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last
-              c.verso = @estudante.layout
-            end
-            if @carteirinha.save 
-              flash[:success] = "Carteirinha criada para o estudante: #{@estudante.nome}. Altere os dados de pagamento."
-              render :edit
-            else
-              flash[:error] = "Não foi possível criar carteirinha. #{@carteirinha.errors.full_messages}"
+            carteirinha_valida = @estudante.last_valid_carteirinha
+            if @estudante.last_valid_carteirinha
+              flash[:alert] = "Já existe uma Carteira válida para esse estudante. Número de série: #{carteirinha_valida.numero_serie}"
               redirect_to :back
+            elsif current_admin_user.entidade && current_admin_user.valor_certificado > 0 && current_admin_user.saldo < current_admin_user.valor_certificado
+              flash[:alert] = "Saldo insuficiente."
+              redirect_to :back
+            else  
+              @carteirinha = @estudante.carteirinhas.build do |c|
+                # Dados pessoais
+                c.nome = @estudante.nome
+                c.rg   = @estudante.rg
+                c.cpf  = @estudante.cpf
+                c.data_nascimento = @estudante.data_nascimento
+                c.expedidor_rg = @estudante.expedidor_rg
+                c.uf_expedidor_rg = @estudante.uf_expedidor_rg
+                c.foto = @estudante.foto
+                c.xerox_rg = @estudante.xerox_rg
+                c.xerox_cpf = @estudante.xerox_cpf
+                c.comprovante_matricula = @estudante.comprovante_matricula
+
+                # Dados estudantis
+                c.matricula = @estudante.matricula
+                c.instituicao_ensino = @estudante.instituicao_ensino.nome
+                c.cidade_inst_ensino = @estudante.instituicao_ensino.cidade.nome
+                c.uf_inst_ensino = @estudante.instituicao_ensino.estado.sigla
+                c.escolaridade = @estudante.escolaridade_nome
+                c.curso_serie = @estudante.curso_nome
+                      
+                # Dados de pagamento
+                c.valor = @estudante.entidade.valor_carteirinha.to_f+@estudante.entidade.frete_carteirinha.to_f
+                c.status_versao_impressa = :pagamento #status versao impressa
+                c.status_pagamento = :iniciado  #status pagamento
+                c.forma_pagamento = :a_definir  #forma pagamento
+                    
+                # Dados do Usuario admin
+                c.admin_user = current_admin_user
+
+                # Layout 
+                c.layout_carteirinha = @estudante.entidade.layout_carteirinhas.last
+              end
+              if @carteirinha && @carteirinha.save 
+                flash[:success] = "Carteirinha criada para o estudante: #{@estudante.nome}. Altere os dados de pagamento."
+                render :edit
+              else
+                flash[:error] = "Não foi possível criar carteirinha. #{@carteirinha.errors.full_messages}"
+                redirect_to :back
+              end
             end
           end  
-      end
+        end
     end
       # Permite envio de notificações para o aluno quando alterado o status da carteirinha 
       # def update(options={}, &block) 

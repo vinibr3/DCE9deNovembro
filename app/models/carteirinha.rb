@@ -33,7 +33,6 @@ class Carteirinha < ActiveRecord::Base
 	enum status_versao_impressa: @@status_versao_impressas
 	enum forma_pagamento: @@forma_pagamentos
 	enum status_pagamento: @@status_pagamentos
-	enum verso: {verso_normal: "0", verso_alternativo: "1"}
 
 	# validações
 	validates :nome, length: { maximum: 70, too_long: "Máximo de 70 caracteres permitidos"}, format:{with: LETRAS, message:"Somente letras é permitido!"}
@@ -51,8 +50,7 @@ class Carteirinha < ActiveRecord::Base
 	validates :uf_expedidor_rg, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :uf_inst_ensino, length:{is: 2}, format:{with:STRING_REGEX}, allow_blank: true
 	validates :escolaridade, length:{maximum: 70, too_long: "Máximo de 70 caracteres permitidos!"},
-							             format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true					             
-
+							             format:{with:LETRAS, message:"Somente letras é permitido"}, allow_blank: true
 	#foto
 	validates_attachment_size :foto, :less_than => 1.megabytes
 	validates_attachment_file_name :foto, :matches => [/png\Z/, /jpe?g\Z/]
@@ -90,7 +88,7 @@ class Carteirinha < ActiveRecord::Base
 	end
 
 	def valid
-		dias_validade >= 0
+		dias_validade >= 0 && self.status_versao_impressa_to_i >= 2 && self.status_versao_impressa_to_i <= 4
 	end
 
 	def em_solicitacao?
@@ -251,20 +249,14 @@ class Carteirinha < ActiveRecord::Base
 		img = Magick::Image.read(lyt.anverso.url)
 		img = img.first
 		
-		# Configura draw
-		draw = Magick::Draw.new
-		draw.font_weight = lyt.font_weight_type                  unless lyt.font_weight.blank?
-		draw.fill = lyt.font_color                               unless lyt.font_color.blank?
-		draw.font_style = lyt.font_style_type                    unless lyt.font_style.blank?
-		draw.font = lyt.font_color.mb_chars.titlecase            unless lyt.font_name.blank?
-		draw.font_family = lyt.font_family.mb_chars.downcase     unless lyt.font_family.blank? 
-		draw.pointsize = lyt.tamanho_fonte                       unless lyt.tamanho_fonte.blank?
-
 		# Desenha os dados (texto) no layout
-		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, to_case(self.nome, lyt.font_box))                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, to_case(self.instituicao_ensino, lyt.font_box))       unless lyt.instituicao_ensino_posx.blank? || lyt.instituicao_ensino_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, to_case(self.escolaridade, lyt.font_box))               	         unless lyt.escolaridade_posx.blank? || lyt.escolaridade_posy.blank? 
-		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, to_case(self.curso_serie, lyt.font_box))                                        unless lyt.curso_posx.blank? || lyt.curso_posy.blank? 
+		draw = Magick::Draw.new
+		draw.font_weight = Magick::BoldWeight
+		draw.pointsize = lyt.tamanho_fonte
+		draw.annotate(img, 0, 0, lyt.nome_posx, lyt.nome_posy, self.nome.mb_chars.upcase)                                            	 unless lyt.nome_posx.blank? || lyt.nome_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.instituicao_ensino_posx, lyt.instituicao_ensino_posy, self.instituicao_ensino.mb_chars.upcase)       unless lyt.instituicao_ensino_posx.blank? || lyt.instituicao_ensino_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.escolaridade_posx, lyt.escolaridade_posy, self.escolaridade.mb_chars.upcase)               	         unless lyt.escolaridade_posx.blank? || lyt.escolaridade_posy.blank? 
+		draw.annotate(img, 0, 0, lyt.curso_posx, lyt.curso_posy, self.curso_serie.mb_chars.upcase)                                        unless lyt.curso_posx.blank? || lyt.curso_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.data_nascimento_posx, lyt.data_nascimento_posy, self.data_nascimento.strftime("%d/%m/%Y"))  unless lyt.data_nascimento_posx.blank? || lyt.data_nascimento_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.rg_posx, lyt.rg_posy, self.rg)                                                  		 	 unless lyt.rg_posx.blank? || lyt.rg_posy.blank? 
 		draw.annotate(img, 0, 0, lyt.cpf_posx, lyt.cpf_posy, self.cpf)                                                           unless lyt.cpf_posx.blank? || lyt.cpf_posy.blank?
@@ -299,7 +291,7 @@ class Carteirinha < ActiveRecord::Base
 	       data = Zip::OutputStream.write_buffer do |stream| 
 	        	carteirinhas.each do |carteirinha|
 		         	begin
-		         	file_name = "#{carteirinha.nome_arquivo}"
+		         	file_name = "#{carteirinha.numero_serie}.jpg"
 		         	temp = Tempfile.new file_name
 		         	img = Magick::Image.from_blob carteirinha.to_blob
 		         	img.first.write temp.path #converte para jpg
@@ -328,13 +320,6 @@ class Carteirinha < ActiveRecord::Base
 		SecureRandom.hex(4).upcase
 	end 
 
-	def nome_arquivo
-		self.verso_alternativo? ? "verso-alternativo-#{self.numero_serie}.jpg" : "#{self.numero_serie}.jpg"
-	end
-
-	def verso_alternativo # não remover, utilizado em 'views/carteirinhas/new.erb.html' 
-	end
-
 	protected
 		def vencida
 			self.vencimento == "1"	
@@ -346,19 +331,5 @@ class Carteirinha < ActiveRecord::Base
 
 		def data_qr_code_blank layout
 			layout.qr_code_posx.blank? || layout.qr_code_posy.blank? || layout.qr_code_width.blank? || layout.qr_code_height.blank?
-		end
-
-	private 
-		def to_case text, style 
-			text_modificado = nil;
-			case style
-			when 'caixabaixa'
-				text_modificado = text.mb_chars.downcase
-			when 'titularizado'
-				text_modificado = text.mb_chars.titleize
-			else  # caixa alta
-				text_modificado = text.mb_chars.upcase
-			end
-			return text_modificado
 		end
 end
