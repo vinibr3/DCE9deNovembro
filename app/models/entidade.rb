@@ -129,6 +129,10 @@ class Entidade < ActiveRecord::Base
 		self.valor_certificado = 0 if self.valor_certificado.blank?
 	end
 
+	def layout_atual
+ 		self.layout_carteirinhas.last
+ 	end
+
 	private 
 		def config_data_from_dominio 
 			self.usuario = self.sigla unless self.usuario

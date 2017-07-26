@@ -11,7 +11,7 @@ class EstudantesController < ApplicationController
 		else
 			@entidade = Entidade.entidade_padrao
 		end
-		@layout_atual = @entidade.layout_atual
+		@layout_atual = @entidade.layout_atual if @entidade
 	end	
 
 	def update

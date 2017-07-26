@@ -19,6 +19,8 @@ class Carteirinha < ActiveRecord::Base
 	STRING_REGEX = /\A[a-z A-Z]+\z/
 	LETRAS = /[A-Z a-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+/
 
+	enum verso: [:verso_normal, :verso_alternativo]
+
 	@@status_versao_impressas = {pagamento: "Pagamento", documentacao: "Documentação", aprovada: "Aprovada", 
 								   					   enviada: "Enviada", entregue: "Entregue", cancelada: "Cancelada", revogada: "Revogada"}
 
@@ -319,6 +321,13 @@ class Carteirinha < ActiveRecord::Base
 	def self.gera_codigo_uso
 		SecureRandom.hex(4).upcase
 	end 
+
+	def nome_arquivo 
+ 		self.verso_alternativo? ? "verso-alternativo-#{self.numero_serie}.jpg" : "#{self.numero_serie}.jpg"
+ 	end
+ 
+ 	def verso_alternativo # não remover, utilizado em 'views/carteirinhas/new.erb.html' 
+ 	end
 
 	protected
 		def vencida

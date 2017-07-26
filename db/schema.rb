@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170625160852) do
+ActiveRecord::Schema.define(version: 20170705034140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 20170625160852) do
     t.date     "nao_antes"
     t.date     "nao_depois"
     t.string   "qr_code"
-    t.string   "status_versao_impressa",                       null: false
+    t.string   "status_versao_impressa",                                     null: false
     t.string   "foto_file_name"
     t.string   "foto_content_type"
     t.integer  "foto_file_size"
@@ -119,8 +119,8 @@ ActiveRecord::Schema.define(version: 20170625160852) do
     t.integer  "estudante_id"
     t.integer  "layout_carteirinha_id"
     t.string   "alterado_por"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.string   "valor"
     t.string   "forma_pagamento"
     t.string   "status_pagamento"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 20170625160852) do
     t.datetime "aprovada_em"
     t.integer  "admin_user_id"
     t.integer  "numero_serie",                       limit: 8
+    t.string   "verso",                                        default: "0"
   end
 
   add_index "carteirinhas", ["admin_user_id"], name: "index_carteirinhas_on_admin_user_id", using: :btree
