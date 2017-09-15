@@ -2,7 +2,7 @@
 	<%= form_for ([@estudante, @estudante.carteirinhas.build]) do |f| %>
 		<div class="row">
 			<div class="col-sm-12 col-md-12">
-				<h3 class="text-primary" style="margin-bottom: 30px;"> Carteira de Identifição Estudantil </h3>
+				<h3 class="text-primary" style="margin-bottom: 30px;"> Carteira de Identificação Estudantil </h3>
 				<div id="flip-card" ontouchstart="this.classList.toggle('hover');">
 					<div id="card">
 						<div id="front">
@@ -71,6 +71,9 @@
 			if(flip){
 				$('#card').css('transform', "rotateY("+graus+"deg)");
 				graus+=arco;
+				if(graus == 380){
+					graus = 0;
+				}
 			}
 		}, 50);
 </script>

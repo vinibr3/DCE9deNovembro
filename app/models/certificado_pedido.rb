@@ -39,11 +39,7 @@ class CertificadoPedido < ActiveRecord::Base
 
 	def self.status_pagamento_by_code code
  		statuses = CertificadoPedido.statuses.map{|k,v| k}
- 		if 1 < code.to_i && code.to_i < 7
- 			return statuses[code.to_i]
- 		else
- 			return statuses[0] # Iniciado
- 		end
+ 		return statuses[code.to_i]
  	end
 
  	def status_pagamento_to_i 

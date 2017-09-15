@@ -2,7 +2,7 @@ ActiveAdmin.register CertificadoPedido do
 	menu priority: 7, if: proc{current_admin_user.valor_certificado != 0 || !current_admin_user.entidade.nil? && current_admin_user.sim? || current_admin_user.entidade.nil?}
 	
 	actions :all, except: [:destroy, :edit]
-	
+
 	scope_to :current_admin_user, if: proc{!current_admin_user.entidade.nil?}
 
 	config.sort_order = 'created_at_desc'
@@ -11,6 +11,7 @@ ActiveAdmin.register CertificadoPedido do
 
 	filter :status, as: :select, collection: proc{CertificadoPedido.class_variable_get(:@@status_pagamentos)}
 	filter :forma_pagamento, as: :select, collection: proc{CertificadoPedido.class_variable_get(:@@forma_pagamentos)}
+	filter :admin_user, label:"Usuario", collection: proc{AdminUser.all.map{|u| [u.usuario, u.id]}}, :if=>proc{current_admin_user.sim? || current_admin_user.entidade.nil?}
 
 	index do
 		column :id
@@ -57,6 +58,15 @@ ActiveAdmin.register CertificadoPedido do
 				row "Forma pagamento" do |certificado_pedido|
 					certificado_pedido.forma_pagamento
 				end
+				row "Data Pagamento" do |certificado_pedido|
+					certificado_pedido.pago_em
+				end
+				row "Data Contestação" do |certificado_pedido|
+					certificado_pedido.contestado_em
+				end
+				row "Criado em" do |certificado_pedido|
+					certificado_pedido.created_at
+				end
 			end
 		end
 	end
@@ -94,17 +104,15 @@ ActiveAdmin.register CertificadoPedido do
 	end
 
 	member_action :pagamento, method: :get do
-		#email = "vinicius.deoliveira@outlook.com"
-		#token = "92097C02DABA4056ACC98DDA16C118F3"
+
 		description = "#{resource.quantidade} Certificados"
-		redirect_url = "http://162.243.72.115/admin"
-		notification_url = "http://162.243.72.115/admin/pagamento/notificacoes"
 		usuario = resource.admin_user 
 		
 		payment = PagSeguro::PaymentRequest.new
 		payment.reference = resource.id
-		payment.notification_url = notification_url
-		payment.redirect_url = redirect_url
+		payment.notification_url = ENV['DOTI_PAGSEGURO_URL_NOTIFICATION']
+		payment.redirect_url = ENV['DOTI_PAGSEGURO_URL_CALLBACK']
+		payment.credentials = PagSeguro::AccountCredentials.new(ENV['DOTI_PAGSEGURO_EMAIL'], ENV['DOTI_PAGSEGURO_TOKEN'])
 
 		payment.items << {
 			    id: resource.id,

@@ -88,7 +88,7 @@ class AdminUser < ActiveRecord::Base
   end
 
   def show_no_menu?
-    if self.valor_certificado > 0 || !self.entidade.nil? || self.sim?
+     if self.valor_certificado > 0 || !self.entidade.nil? || self.sim?
       return true
     else
       return false
@@ -101,6 +101,10 @@ class AdminUser < ActiveRecord::Base
 
   def remove_saldo valor
     self.saldo = self.saldo.to_f-valor if valor
+  end
+
+  def tem_saldo?
+    self.saldo && self.saldo >= self.valor_certificado ? true : false
   end
 
   private    
