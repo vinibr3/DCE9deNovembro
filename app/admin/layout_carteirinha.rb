@@ -32,6 +32,18 @@
 					row :anverso do 
 						a layout_carteirinha.anverso_file_name, class: "show-popup-link", href: layout_carteirinha.anverso.url
 					end
+					row "Largura Anverso" do 
+ 						layout_carteirinha.anverso_width			
+ 					end
+ 					row "Altura Anverso" do 
+ 						layout_carteirinha.anverso_height			
+ 					end
+ 					row "Resolução X Anverso" do 
+ 						layout_carteirinha.anverso_resolution_x			
+ 					end
+ 					row "Resolução Y Anverso" do 
+ 						layout_carteirinha.anverso_resolution_y			
+ 					end
 					row :verso do 
 						a layout_carteirinha.verso_file_name, class: "show-popup-link", href: layout_carteirinha.verso.url
 					end
@@ -43,6 +55,13 @@
 					end
 				end
 			end
+			panel "Impressão" do
+ 				attributes_table_for layout_carteirinha do
+ 					row "Fundo Transparente" do
+ 						layout_carteirinha.impressao_transparente
+ 					end
+ 				end
+ 			end
 			panel "Fonte" do 
 				attributes_table_for layout_carteirinha do
 					row "Nome" do
@@ -123,6 +142,9 @@
 				f.input :verso_alternativo, label: "Verso Alternativo", :hint => "Imagem Atual: #{f.object.verso_alternativo_file_name}"
 				f.input :entidade, collection: Entidade.order(:nome).map{|e| [e.nome, e.id]}, prompt: "Selecione Entidade", include_blank: false
 			end
+			f.inputs "Impressão" do
+ 				f.input :impressao_transparente, as: :radio, label: "Fundo Transparente"
+ 			end
 			div class: 'inputs drag-and-drop' do
 					div class: 'drag-pick' do
 						ul class: 'list-fonte' do 
